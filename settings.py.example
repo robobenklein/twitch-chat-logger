@@ -1,5 +1,5 @@
 IRC = {
-    'SERVER': 'irc.twitch.tv',
+    'SERVER': 'irc.chat.twitch.tv',
     'NICK': 'twitch_username',
     'PASSWORD': 'your_oauth_password',  # tip: http://twitchapps.com/tmi/
     'PORT': 6667,
