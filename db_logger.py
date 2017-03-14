@@ -6,11 +6,13 @@ from utils import current_time_in_milli
 class DatabaseLogger:
     conn = None
     cursor = None
+    senders_whitelist = None
 
-    def __init__(self, host, name, user, password):
+    def __init__(self, host, name, user, password, senders_whitelist=None):
         self.conn = psycopg2.connect(host=host, dbname=name, user=user, password=password)
         self.conn.autocommit = True
         self.cursor = self.conn.cursor()
+        self.senders_whitelist = senders_whitelist
 
     def close(self):
         self.cursor.close()
@@ -24,7 +26,11 @@ class DatabaseLogger:
             return
 
         try:
-            self.cursor.execute("INSERT INTO chat_log (sender, message, channel, date) VALUES (%s, %s, %s, %s)",
+            if self.senders_whitelist is not None and sender in self.senders_whitelist:
+                self.cursor.execute("INSERT INTO chat_log (sender, message, channel, date) VALUES (%s, %s, %s, %s)",
+                                (sender, message, channel, current_time_in_milli()))
+            elif self.senders_whitelist is None:
+                self.cursor.execute("INSERT INTO chat_log (sender, message, channel, date) VALUES (%s, %s, %s, %s)",
                                 (sender, message, channel, current_time_in_milli()))
         except psycopg2.DataError as e:
             print e
