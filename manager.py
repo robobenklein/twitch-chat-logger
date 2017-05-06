@@ -22,7 +22,7 @@ class TwitchManager:
         self.channels_amount = channels_amount
         self.log_filename = log_filename
         self.channels = channels
-        if settings.USERS is not None and len(settings.USERS) is not 0:
+        if settings.USERS is not None:
             self.db_logger = DatabaseLogger(settings.DATABASE['HOST'],
                                         settings.DATABASE['NAME'],
                                         settings.DATABASE['USER'],
@@ -40,7 +40,7 @@ class TwitchManager:
                              settings.IRC['NICK'],
                              settings.IRC['PASSWORD'],
                              self.log_filename)
-        if settings.USERS is not None and len(settings.USERS) is not 0:
+        if settings.USERS is not None:
             bot_db_logger = DatabaseLogger(settings.DATABASE['HOST'],
                                        settings.DATABASE['NAME'],
                                        settings.DATABASE['USER'],
@@ -48,9 +48,9 @@ class TwitchManager:
                                        settings.USERS)
         else:
             bot_db_logger = DatabaseLogger(settings.DATABASE['HOST'],
-	                               settings.DATABASE['NAME'],
-	                               settings.DATABASE['USER'],
-				       settings.DATABASE['PASSWORD'])
+                                   settings.DATABASE['NAME'],
+                                   settings.DATABASE['USER'],
+           settings.DATABASE['PASSWORD'])
 
         bot = TwitchBot(name, conn, bot_db_logger, Queue.Queue(), self.log_filename)
         bot.daemon = True

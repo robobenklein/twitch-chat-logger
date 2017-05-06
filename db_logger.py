@@ -26,12 +26,9 @@ class DatabaseLogger:
             return
 
         try:
-            if self.senders_whitelist is not None and sender in self.senders_whitelist:
+            if (self.senders_whitelist is not None and sender in self.senders_whitelist) or (self.senders_whitelist is None):
                 self.cursor.execute("INSERT INTO chat_log (sender, message, channel, date) VALUES (%s, %s, %s, %s)",
-                                (sender, message, channel, current_time_in_milli()))
-            elif self.senders_whitelist is None:
-                self.cursor.execute("INSERT INTO chat_log (sender, message, channel, date) VALUES (%s, %s, %s, %s)",
-                                (sender, message, channel, current_time_in_milli()))
+                                    (sender, message, channel, current_time_in_milli()))
         except psycopg2.DataError as e:
             print e
             print message
