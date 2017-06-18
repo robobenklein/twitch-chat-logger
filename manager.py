@@ -22,17 +22,11 @@ class TwitchManager:
         self.channels_amount = channels_amount
         self.log_filename = log_filename
         self.channels = channels
-        if settings.USERS is not None:
-            self.db_logger = DatabaseLogger(settings.DATABASE['HOST'],
+        self.db_logger = DatabaseLogger(settings.DATABASE['HOST'],
                                         settings.DATABASE['NAME'],
                                         settings.DATABASE['USER'],
                                         settings.DATABASE['PASSWORD'],
                                         settings.USERS)
-        else:
-            self.db_logger = DatabaseLogger(settings.DATABASE['HOST'],
-                                        settings.DATABASE['NAME'],
-                                        settings.DATABASE['USER'],
-                                        settings.DATABASE['PASSWORD'])
 
     def _create_bot(self, name, channels):
         conn = IRCConnection(settings.IRC['SERVER'],
@@ -42,15 +36,15 @@ class TwitchManager:
                              self.log_filename)
         if settings.USERS is not None:
             bot_db_logger = DatabaseLogger(settings.DATABASE['HOST'],
-                                       settings.DATABASE['NAME'],
-                                       settings.DATABASE['USER'],
-                                       settings.DATABASE['PASSWORD'],
-                                       settings.USERS)
+                                           settings.DATABASE['NAME'],
+                                           settings.DATABASE['USER'],
+                                           settings.DATABASE['PASSWORD'],
+                                           settings.USERS)
         else:
             bot_db_logger = DatabaseLogger(settings.DATABASE['HOST'],
-                                   settings.DATABASE['NAME'],
-                                   settings.DATABASE['USER'],
-           settings.DATABASE['PASSWORD'])
+                                           settings.DATABASE['NAME'],
+                                           settings.DATABASE['USER'],
+                                           settings.DATABASE['PASSWORD'])
 
         bot = TwitchBot(name, conn, bot_db_logger, Queue.Queue(), self.log_filename)
         bot.daemon = True
